@@ -1,10 +1,31 @@
-﻿@model List<State>
+﻿<link href='https://unpkg.com/css.gg@2.0.0/icons/css/trash.css' rel='stylesheet'>
+@model IEnumerable<State>
+@{
+    List<String> AllTimezones = ViewData["AllTimezones"] as List<string>;
+}
 
 <h1>States</h1>
+
+<h2>Genre Filter</h2>
+@if (ViewData["SearchGenre"] != null)
+{
+    <p>Filtered by: <strong>@ViewData["SearchGenre"]</strong></p>
+}
+
+<a href="/states">Clear Filter</a> | 
+@foreach (var e in AllTimezones)
+{
+    <a href="/states?timezone=@e">@e</a>
+
+    <span> | </span>
+}
 
 @foreach (var state in Model)
 {
     <p><strong>@state.Abbreviation</strong>: <a href="/states/@state.Id">@state.Name</a></p>
+    <form method="post" action="/states/delete/@state.Id">
+        <button type="submit"> <i class="gg-trash"></i></button>
+    </form>
 }
 
 <p><a href="/states/new">New State</a></p>
